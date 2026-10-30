@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caderno de Erros - Concursos Públicos</title>
-
-    <!-- Tailwind CSS CDN -->
+    
+    <!-- CDN CSS do Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,1032 +19,885 @@
                             400: '#2dd4bf',
                             500: '#14b8a6',
                             600: '#0d9488',
-                            900: '#134e4a'
-                        },
-                        darkBg: '#0b132b',
-                        darkCard: '#1c2541',
-                        darkInput: '#0b132b',
-                        darkBorder: '#3a506b'
+                            800: '#115e59',
+                            900: '#134e4a',
+                        }
                     }
                 }
             }
         }
     </script>
-    <!-- FontAwesome Icons -->
+    
+    <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0b132b;
-            color: #f1f5f9;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
         }
-        ::-webkit-scrollbar-track {
-            background: #0b132b;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #3a506b;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(51, 65, 85, 0.8);
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #14b8a6;
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(71, 85, 105, 1);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased">
 
-    <!-- Top Navigation Header -->
-    <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <!-- Logo & Brand -->
-            <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-tr from-brand-600 to-teal-400 p-2.5 rounded-xl shadow-lg shadow-brand-500/20 text-slate-950 font-bold">
-                    <i class="fa-solid fa-bullseye text-xl"></i>
+    <!-- Header -->
+    <header class="bg-slate-900/80 backdrop-blur border-b border-slate-800 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-500/10 border border-brand-500/30 p-2 rounded-xl text-brand-400">
+                    <i class="fa-solid fa-book-bookmark text-xl"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight bg-gradient-to-r from-teal-300 via-brand-400 to-emerald-400 bg-clip-text text-transparent">Caderno de Erros</h1>
-                    <p class="text-xs text-slate-400">Preparação de Alta Performance</p>
+                    <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                        Caderno de Erros <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30">Pro</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Mapeamento de Falhas &amp; Revisão Ativa</p>
                 </div>
             </div>
 
-            <!-- Global Action Controls -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="startFlashcards()" class="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-xl shadow-lg shadow-indigo-500/20 transition-all transform active:scale-95">
-                    <i class="fa-solid fa-bolt text-yellow-300"></i>
-                    <span>Iniciar Revisão</span>
+            <!-- Botões de Ação Topo -->
+            <div class="flex items-center gap-2 flex-wrap">
+                <button onclick="openModal('addQuestionModal')" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-semibold px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition shadow-lg shadow-brand-500/20">
+                    <i class="fa-solid fa-plus"></i> Novo Erro
                 </button>
-                
-                <button onclick="openFormModal()" class="flex items-center gap-2 bg-brand-500 hover:bg-brand-400 text-slate-950 font-semibold text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-xl shadow-lg shadow-brand-500/20 transition-all transform active:scale-95">
-                    <i class="fa-solid fa-plus"></i>
-                    <span class="hidden sm:inline">Cadastrar Erro</span>
+                <button onclick="startFlashcards()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition">
+                    <i class="fa-solid fa-bolt"></i> Modo Flashcard
                 </button>
-
-                <!-- Data Menu dropdown -->
-                <div class="relative">
-                    <button onclick="toggleDataMenu()" id="btnDataMenu" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition-colors">
-                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                    </button>
-                    <div id="dataMenu" class="hidden absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-700 rounded-xl shadow-2xl py-2 z-50">
-                        <button onclick="exportJSON()" class="w-full text-left px-4 py-2 text-xs sm:text-sm text-slate-300 hover:bg-slate-800 hover:text-brand-400 flex items-center gap-2.5">
-                            <i class="fa-solid fa-file-export"></i> Exportar Backup (JSON)
-                        </button>
-                        <label class="w-full text-left px-4 py-2 text-xs sm:text-sm text-slate-300 hover:bg-slate-800 hover:text-brand-400 flex items-center gap-2.5 cursor-pointer">
-                            <i class="fa-solid fa-file-import"></i> Importar Backup
-                            <input type="file" id="importInput" accept=".json" class="hidden" onchange="importJSON(event)">
-                        </label>
-                        <hr class="border-slate-800 my-1">
-                        <button onclick="clearAllData()" class="w-full text-left px-4 py-2 text-xs sm:text-sm text-rose-400 hover:bg-rose-950/30 flex items-center gap-2.5">
-                            <i class="fa-solid fa-trash"></i> Limpar Todos os Dados
-                        </button>
-                    </div>
-                </div>
+                <button onclick="exportData()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-sm transition" title="Exportar Backup (JSON)">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+                <label class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-sm transition cursor-pointer" title="Importar Backup (JSON)">
+                    <i class="fa-solid fa-upload"></i>
+                    <input type="file" id="importFileInput" onchange="importData(event)" class="hidden" accept=".json">
+                </label>
             </div>
         </div>
     </header>
 
-    <!-- Main Container Layout -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <!-- Main Layout -->
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <!-- Top Dashboard Metrics -->
-        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+        <!-- Sidebar / Árvore de Matérias & Filtros -->
+        <aside class="lg:col-span-3 space-y-6">
+            
+            <!-- Resumo de Estatísticas -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+                    <span>Panorama</span>
+                    <i class="fa-solid fa-chart-pie text-brand-400"></i>
+                </h3>
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl">
+                        <span class="block text-2xl font-black text-slate-100" id="statTotalErros">0</span>
+                        <span class="text-[11px] text-slate-400 font-medium">Cadastrados</span>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800/80 p-3 rounded-xl">
+                        <span class="block text-2xl font-black text-emerald-400" id="statDominados">0</span>
+                        <span class="text-[11px] text-slate-400 font-medium">Dominados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros Rápidos -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
+                    <span>Filtros</span>
+                    <button onclick="resetFilters()" class="text-xs text-brand-400 hover:underline lowercase font-normal">limpar</button>
+                </h3>
+
+                <!-- Busca por texto -->
                 <div>
-                    <p class="text-xs font-medium text-slate-400">Total Registrado</p>
-                    <h3 class="text-2xl font-bold text-white mt-0.5" id="metricTotal">0</h3>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-500"></i>
+                        <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Buscar enunciados, bizus..." class="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500">
+                    </div>
                 </div>
-                <div class="w-10 h-10 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-center text-teal-400">
-                    <i class="fa-solid fa-layer-group"></i>
-                </div>
-            </div>
 
-            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+                <!-- Filtro de Motivo -->
                 <div>
-                    <p class="text-xs font-medium text-slate-400">Pendentes de Revisão</p>
-                    <h3 class="text-2xl font-bold text-amber-400 mt-0.5" id="metricPendentes">0</h3>
-                </div>
-                <div class="w-10 h-10 bg-amber-950/40 border border-amber-800/40 rounded-xl flex items-center justify-center text-amber-400">
-                    <i class="fa-solid fa-clock"></i>
-                </div>
-            </div>
-
-            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-medium text-slate-400">Dominados / Ok</p>
-                    <h3 class="text-2xl font-bold text-emerald-400 mt-0.5" id="metricDominados">0</h3>
-                </div>
-                <div class="w-10 h-10 bg-emerald-950/40 border border-emerald-800/40 rounded-xl flex items-center justify-center text-emerald-400">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
-            </div>
-
-            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
-                <div>
-                    <p class="text-xs font-medium text-slate-400">Taxa de Domínio</p>
-                    <h3 class="text-2xl font-bold text-brand-400 mt-0.5" id="metricTaxa">0%</h3>
-                </div>
-                <div class="w-10 h-10 bg-teal-950/40 border border-teal-800/40 rounded-xl flex items-center justify-center text-brand-400">
-                    <i class="fa-solid fa-chart-pie"></i>
-                </div>
-            </div>
-        </section>
-
-        <!-- Diagnostics & Reason Breakdown -->
-        <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5">
-            <div class="flex items-center justify-between mb-3">
-                <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
-                    <i class="fa-solid fa-microscope text-brand-400"></i> Análise Diagnóstica dos Erros
-                </h2>
-                <span class="text-xs text-slate-500">Descubra seu principal ponto fraco</span>
-            </div>
-            <div id="diagnosticsChart" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                <!-- Dynamic diagnostic bars will render here -->
-            </div>
-        </section>
-
-        <!-- Filters & Search Toolbar -->
-        <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 space-y-3">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-                <!-- Search Input -->
-                <div class="relative md:col-span-1">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-500 text-xs sm:text-sm"></i>
-                    <input type="text" id="searchInput" oninput="renderApp()" placeholder="Buscar enunciado, assunto ou macete..." class="w-full pl-9 pr-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-500">
-                </div>
-
-                <!-- Discipline Filter -->
-                <div>
-                    <select id="filterDisciplina" onchange="onFilterDisciplinaChange()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-brand-500">
-                        <option value="">Todas as Matérias</option>
+                    <label class="block text-xs text-slate-400 mb-1">Motivo do Erro</label>
+                    <select id="filterReason" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                        <option value="">Todos os motivos</option>
+                        <option value="pegadinha">Pegadinha / Inatenção</option>
+                        <option value="teoria">Falta de Conteúdo Teórico</option>
+                        <option value="lei-seca">Lei Seca / Decoreba</option>
+                        <option value="interpretacao">Erro de Interpretação</option>
+                        <option value="calculo">Erro de Cálculo / Raciocínio</option>
+                        <option value="chute">Chute Consciente</option>
                     </select>
                 </div>
 
-                <!-- Subject/Topic Filter -->
+                <!-- Filtro de Status -->
                 <div>
-                    <select id="filterAssunto" onchange="renderApp()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-brand-500">
-                        <option value="">Todos os Assuntos</option>
-                    </select>
-                </div>
-
-                <!-- Reason Filter -->
-                <div>
-                    <select id="filterMotivo" onchange="renderApp()" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-brand-500">
-                        <option value="">Todos os Motivos de Erro</option>
-                        <option value="Pegadinha / Falta de Atenção">Pegadinha / Falta de Atenção</option>
-                        <option value="Falta de Conteúdo Teórico">Falta de Conteúdo Teórico</option>
-                        <option value="Esquecimento de Lei Seca / Decoreba">Esquecimento de Lei Seca / Decoreba</option>
-                        <option value="Interpretação de Texto Incorreta">Interpretação de Texto Incorreta</option>
-                        <option value="Erro de Cálculo ou Lógica">Erro de Cálculo ou Lógica</option>
-                        <option value="Chute Errado">Chute Errado</option>
+                    <label class="block text-xs text-slate-400 mb-1">Status da Revisão</label>
+                    <select id="filterStatus" onchange="applyFilters()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                        <option value="">Todos os status</option>
+                        <option value="revisar">Necessita Revisão</option>
+                        <option value="em-revisao">Em Revisão</option>
+                        <option value="dominado">Dominado</option>
                     </select>
                 </div>
             </div>
 
-            <!-- Status Tabs / Badges -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-1 pt-1 text-xs">
-                <button onclick="setStatusFilter('ALL')" id="tabStatusAll" class="px-3 py-1.5 rounded-lg border font-medium transition-colors bg-brand-500/10 border-brand-500/40 text-brand-300">
-                    Todos
-                </button>
-                <button onclick="setStatusFilter('Necessita Revisão')" id="tabStatusPendente" class="px-3 py-1.5 rounded-lg border font-medium transition-colors bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200">
-                    <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-1"></i> Necessita Revisão
-                </button>
-                <button onclick="setStatusFilter('Em Revisão')" id="tabStatusEmRevisao" class="px-3 py-1.5 rounded-lg border font-medium transition-colors bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200">
-                    <i class="fa-solid fa-arrows-rotate text-sky-400 mr-1"></i> Em Revisão
-                </button>
-                <button onclick="setStatusFilter('Dominado')" id="tabStatusDominado" class="px-3 py-1.5 rounded-lg border font-medium transition-colors bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200">
-                    <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i> Dominado
-                </button>
+            <!-- Navegação por Matéria/Assunto -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between">
+                    <span>Matérias &amp; Tópicos</span>
+                    <i class="fa-solid fa-folder-tree text-slate-500"></i>
+                </h3>
+                <div id="subjectsTree" class="space-y-2 max-h-[350px] overflow-y-auto custom-scrollbar text-xs">
+                    <!-- Gerado via JS -->
+                </div>
             </div>
-        </section>
 
-        <!-- Main Content Area: Sidebar tree + Questions List -->
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            <!-- Sidebar: Tree of Subjects & Disciplines -->
-            <aside class="lg:col-span-1 space-y-4">
-                <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4">
-                    <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
-                        <h3 class="text-xs font-bold uppercase text-slate-400 tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-folder-tree text-brand-400"></i> Organização por Matéria
-                        </h3>
-                        <span class="text-xs text-slate-500" id="treeTotalCount">0</span>
-                    </div>
-                    <div id="disciplineTree" class="space-y-2 max-h-[500px] overflow-y-auto pr-1">
-                        <!-- Dynamic Tree rendered via JS -->
-                    </div>
+        </aside>
+
+        <!-- Painel Principal / Lista de Erros & Dashboard -->
+        <main class="lg:col-span-9 space-y-6">
+
+            <!-- Diagnóstico Visual dos Erros (Gráfico de Distribuição) -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+                <h3 class="text-sm font-bold text-slate-200 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-bar text-brand-400"></i> Onde você mais está errando?
+                </h3>
+                <div id="reasonsAnalytics" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <!-- Gerado via JS -->
                 </div>
-            </aside>
+            </div>
 
-            <!-- Questions Cards List -->
-            <section class="lg:col-span-3 space-y-4">
-                <div id="questionsContainer" class="space-y-4">
-                    <!-- Dynamic Question Cards -->
+            <!-- Cabeçalho da Lista -->
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
+                        Questoes Registradas
+                        <span id="filteredCountBadge" class="bg-slate-800 text-slate-300 text-xs px-2.5 py-0.5 rounded-full font-semibold">0</span>
+                    </h2>
+                    <p class="text-xs text-slate-400" id="activeFilterLabel">Exibindo todas as questões</p>
                 </div>
 
-                <!-- Empty state placeholder -->
-                <div id="emptyState" class="hidden bg-slate-900/60 border border-dashed border-slate-800 rounded-2xl p-12 text-center">
-                    <div class="w-16 h-16 mx-auto bg-slate-800 rounded-full flex items-center justify-center text-slate-500 mb-4 text-2xl">
-                        <i class="fa-solid fa-book-open"></i>
-                    </div>
-                    <h3 class="text-base font-semibold text-slate-300">Nenhum erro encontrado</h3>
-                    <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1">Nenhuma questão corresponde aos filtros selecionados ou seu caderno ainda está vazio.</p>
-                    <button onclick="openFormModal()" class="mt-4 bg-brand-500 hover:bg-brand-400 text-slate-950 font-semibold text-xs px-4 py-2 rounded-xl transition-all">
-                        <i class="fa-solid fa-plus mr-1"></i> Cadastrar Primeiro Erro
-                    </button>
+                <!-- Ordenação -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 hidden sm:inline">Ordenar:</span>
+                    <select id="sortBy" onchange="renderQuestions()" class="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-brand-500">
+                        <option value="recent">Mais Recentes</option>
+                        <option value="priority">Maior Prioridade</option>
+                        <option value="subject">Por Matéria</option>
+                    </select>
                 </div>
-            </section>
-        </div>
-    </main>
+            </div>
 
-    <!-- Modal: Form for Add / Edit Question -->
-    <div id="formModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden my-auto">
-            <!-- Modal Header -->
-            <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
-                <h2 class="text-base font-bold text-white flex items-center gap-2" id="modalFormTitle">
-                    <i class="fa-solid fa-circle-plus text-brand-400"></i> Registrar Novo Erro
-                </h2>
-                <button onclick="closeFormModal()" class="text-slate-400 hover:text-white transition-colors p-1">
+            <!-- Lista de Questões -->
+            <div id="questionsContainer" class="space-y-4">
+                <!-- Cards injetados pelo JS -->
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL: Adicionar / Editar Questão Errada -->
+    <div id="addQuestionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                <h3 class="text-base font-bold text-slate-100 flex items-center gap-2" id="modalTitle">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Mapear Novo Erro
+                </h3>
+                <button onclick="closeModal('addQuestionModal')" class="text-slate-400 hover:text-slate-200">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <!-- Modal Form Body -->
-            <form id="questionForm" onsubmit="handleFormSubmit(event)" class="p-5 space-y-4 text-xs sm:text-sm">
-                <input type="hidden" id="editId" value="">
+            <form id="questionForm" onsubmit="saveQuestion(event)" class="p-6 overflow-y-auto custom-scrollbar space-y-4 flex-1">
+                <input type="hidden" id="qId">
 
-                <!-- Matéria & Assunto -->
+                <!-- Matéria e Tópico -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block font-medium text-slate-300 mb-1">Matéria <span class="text-rose-400">*</span></label>
-                        <input type="text" id="formDisciplina" required list="disciplinasDatalist" placeholder="Ex: Direito Administrativo" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-500">
-                        <datalist id="disciplinasDatalist"></datalist>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Matéria *</label>
+                        <input type="text" id="qSubject" required list="subjectsList" placeholder="Ex: Direito Administrativo" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
+                        <datalist id="subjectsList"></datalist>
                     </div>
                     <div>
-                        <label class="block font-medium text-slate-300 mb-1">Assunto / Tópico <span class="text-rose-400">*</span></label>
-                        <input type="text" id="formAssunto" required placeholder="Ex: Atos Administrativos - Anulabilidade" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-500">
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Assunto / Tópico *</label>
+                        <input type="text" id="qTopic" required placeholder="Ex: Atos Administrativos - Licitação" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
                     </div>
                 </div>
 
-                <!-- Enunciado -->
+                <!-- CAMPO NOVO: Link ou Origem da Questão -->
                 <div>
-                    <label class="block font-medium text-slate-300 mb-1">Enunciado da Questão / Texto do Erro <span class="text-rose-400">*</span></label>
-                    <textarea id="formEnunciado" rows="3" required placeholder="Cole aqui o enunciado da questão ou o resumo do ponto que errou..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-500"></textarea>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">
+                        Fonte da Questão (Link da Plataforma ou Indicação de PDF)
+                    </label>
+                    <div class="relative">
+                        <i class="fa-solid fa-link absolute left-3 top-2.5 text-xs text-slate-500"></i>
+                        <input type="text" id="qSource" placeholder="Ex: https://www.qconcursos.com/... ou 'PDF Aula 03, Q15'" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
+                    </div>
+                    <span class="text-[10px] text-slate-500 mt-1 block">Insira o link para refazer a questão diretamente no QConcursos/Gran ou onde estudou.</span>
                 </div>
 
-                <!-- Alternativas / Respostas -->
+                <!-- Enunciado / Questão -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Enunciado ou Resumo da Questão *</label>
+                    <textarea id="qText" required rows="3" placeholder="Cole aqui o texto da questão ou o ponto central em que caiu..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+
+                <!-- Sua Resposta vs Resposta Correta -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block font-medium text-slate-400 mb-1">O que você marcou / respondeu</label>
-                        <input type="text" id="formRespostaMarcada" placeholder="Ex: Letra B (Afirmou ser ato nulo)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-rose-300 focus:outline-none focus:border-rose-500">
+                        <label class="block text-xs font-medium text-rose-400 mb-1">O que você marcou (Sua resposta)</label>
+                        <input type="text" id="qUserAnswer" placeholder="Ex: Errado / Alternativa B" class="w-full bg-slate-950 border border-rose-950/50 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-rose-500">
                     </div>
                     <div>
-                        <label class="block font-medium text-slate-400 mb-1">Resposta Correta (Gabarito)</label>
-                        <input type="text" id="formRespostaCorreta" placeholder="Ex: Letra D (É ato anulável)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-emerald-300 focus:outline-none focus:border-emerald-500">
+                        <label class="block text-xs font-medium text-emerald-400 mb-1">Gabarito Correto</label>
+                        <input type="text" id="qCorrectAnswer" placeholder="Ex: Certo / Alternativa D" class="w-full bg-slate-950 border border-emerald-950/50 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500">
                     </div>
                 </div>
 
-                <!-- Motivo do Erro & Prioridade -->
+                <!-- Diagnóstico / Motivo do Erro -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Por que você errou essa questão? *</label>
+                    <select id="qReason" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
+                        <option value="">Selecione o motivo principal...</option>
+                        <option value="pegadinha">⚠️ Pegadinha / Falta de Atenção</option>
+                        <option value="teoria">📚 Faltou Conteúdo Teórico</option>
+                        <option value="lei-seca">⚖️ Esqueci a Lei Seca / Prazos</option>
+                        <option value="interpretacao">🔍 Erro de Interpretação de Texto</option>
+                        <option value="calculo">🔢 Erro de Raciocínio / Cálculo</option>
+                        <option value="chute">🎲 Chute Consciente / Dúvida</option>
+                    </select>
+                </div>
+
+                <!-- Gabarito Comentado / Bizu / Jurisprudência -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">Gabarito Comentado / Macete / Bizu para não errar mais *</label>
+                    <textarea id="qExplanation" required rows="3" placeholder="Explique com suas palavras a regra correta, cole o artigo de lei ou a jurisprudência chave..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500"></textarea>
+                </div>
+
+                <!-- Prioridade e Status -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block font-medium text-slate-300 mb-1">Diagnóstico (Motivo do Erro) <span class="text-rose-400">*</span></label>
-                        <select id="formMotivo" required class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-500">
-                            <option value="Pegadinha / Falta de Atenção">Pegadinha / Falta de Atenção</option>
-                            <option value="Falta de Conteúdo Teórico">Falta de Conteúdo Teórico</option>
-                            <option value="Esquecimento de Lei Seca / Decoreba">Esquecimento de Lei Seca / Decoreba</option>
-                            <option value="Interpretação de Texto Incorreta">Interpretação de Texto Incorreta</option>
-                            <option value="Erro de Cálculo ou Lógica">Erro de Cálculo ou Lógica</option>
-                            <option value="Chute Errado">Chute Errado</option>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Prioridade de Revisão</label>
+                        <select id="qPriority" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
+                            <option value="alta">🔴 Alta (Cai muito / Dificuldade Alta)</option>
+                            <option value="media" selected>🟡 Média</option>
+                            <option value="baixa">🟢 Baixa (Detalhe pontual)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block font-medium text-slate-300 mb-1">Status Inicial</label>
-                        <select id="formStatus" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-500">
-                            <option value="Necessita Revisão">Necessita Revisão</option>
-                            <option value="Em Revisão">Em Revisão</option>
-                            <option value="Dominado">Dominado</option>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Status Inicial</label>
+                        <select id="qStatus" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
+                            <option value="revisar">Precisa de Revisão</option>
+                            <option value="em-revisao">Em Revisão</option>
+                            <option value="dominado">Dominado</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Explicação / Macete / Lei Seca -->
-                <div>
-                    <label class="block font-medium text-slate-300 mb-1">Explicação / Bizu / Lei Seca / Por que não posso esquecer?</label>
-                    <textarea id="formExplicacao" rows="3" placeholder="Escreva a regra, macete ou artigo da lei que fundamenta a resposta correta..." class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-brand-500"></textarea>
-                </div>
-
-                <!-- Footer Buttons -->
-                <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-                    <button type="button" onclick="closeFormModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium rounded-xl transition-colors">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="px-5 py-2 bg-brand-500 hover:bg-brand-400 text-slate-950 font-bold rounded-xl transition-all shadow-lg shadow-brand-500/20">
-                        Salvar Questão
+                <!-- Botoes -->
+                <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-800">
+                    <button type="button" onclick="closeModal('addQuestionModal')" class="px-4 py-2 text-xs font-medium text-slate-400 hover:text-slate-200">Cancelar</button>
+                    <button type="submit" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-bold px-5 py-2 rounded-xl text-xs transition shadow-lg shadow-brand-500/20">
+                        Salvar no Caderno
                     </button>
                 </div>
             </form>
+
         </div>
     </div>
 
-    <!-- Modal: Interactive Flashcards / Study Session -->
-    <div id="flashcardModal" class="hidden fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden">
-            <!-- Header -->
-            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+    <!-- MODAL: Modo Flashcard / Treino -->
+    <div id="flashcardModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full flex flex-col shadow-2xl min-h-[450px]">
+            
+            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-bolt text-yellow-400 text-lg"></i>
-                    <h2 class="text-base font-bold text-white">Sessão de Revisão Ativa</h2>
-                </div>
-                <div class="flex items-center gap-4">
-                    <span id="fcProgress" class="text-xs font-semibold text-brand-400 bg-brand-950/60 border border-brand-800/60 px-3 py-1 rounded-full">
-                        0 / 0
+                    <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                        <i class="fa-solid fa-bolt"></i> Revisão Ativa
                     </span>
-                    <button onclick="closeFlashcardModal()" class="text-slate-400 hover:text-white transition-colors">
-                        <i class="fa-solid fa-xmark text-lg"></i>
-                    </button>
+                    <span class="text-xs text-slate-400" id="fcCounter">1 / 10</span>
                 </div>
+                <button onclick="closeModal('flashcardModal')" class="text-slate-400 hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
             </div>
 
-            <!-- Card Body -->
-            <div class="p-6 overflow-y-auto flex-grow space-y-5" id="fcBody">
-                <!-- Dynamic Flashcard Content -->
-            </div>
-
-            <!-- Footer Controls -->
-            <div class="p-5 border-t border-slate-800 bg-slate-950/60 flex flex-wrap items-center justify-between gap-3" id="fcFooter">
-                <!-- Controls JS generated -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification Toast Container -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-800 border border-brand-500 text-slate-100 px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
-        <i class="fa-solid fa-circle-check text-brand-400 text-lg" id="toastIcon"></i>
-        <span id="toastMsg" class="text-xs sm:text-sm font-medium">Mensagem de alerta</span>
-    </div>
-
-    <!-- Application JavaScript Logic -->
-    <script>
-        // Data State Store
-        const STORAGE_KEY = 'CADERNO_ERROS_CONCURSOS_DATA_V1';
-        let items = [];
-        let activeStatusFilter = 'ALL';
-        let selectedDisciplineFromTree = null;
-        let selectedSubjectFromTree = null;
-
-        // Flashcards Session State
-        let fcItems = [];
-        let fcIndex = 0;
-        let fcRevealed = false;
-
-        // Default Initial Seed Data if empty
-        const sampleSeedData = [
-            {
-                id: '1',
-                disciplina: 'Direito Administrativo',
-                assunto: 'Atos Administrativos - Anulabilidade',
-                enunciado: 'Acerca da invalidação dos atos administrativos, assinale a opção correta quanto à revogação e anulação.',
-                respostaMarcada: 'Marquei que o ato viciado por incompetência relativa é insanável.',
-                respostaCorreta: 'O ato com defeito relativo de competência pode ser convalidado pela autoridade competente.',
-                motivo: 'Esquecimento de Lei Seca / Decoreba',
-                status: 'Necessita Revisão',
-                explicacao: 'Bizu: VÍCIO DE COMPETÊNCIA (desde que não exclusiva) e VÍCIO DE FORMA (desde que não essencial) admitem CONVALIDAÇÃO (FO-CO). Lembre-se da Súmula 473 do STF.',
-                createdAt: new Date().toISOString()
-            },
-            {
-                id: '2',
-                disciplina: 'Língua Portuguesa',
-                assunto: 'Sintaxe - Concordância Verbal',
-                enunciado: 'Assinale a alternativa em que a concordância verbal atende às exigências da norma-padrão da língua portuguesa.',
-                respostaMarcada: 'Houveram muitos candidatos aprovados no último certame.',
-                respostaCorreta: 'Houve muitos candidatos aprovados no último certame.',
-                motivo: 'Pegadinha / Falta de Atenção',
-                status: 'Em Revisão',
-                explicacao: 'O verbo HAVER no sentido de existir ou ocorrer é IMPESSOAL. Fica sempre na 3ª pessoa do singular (Houve problemas, HAVIA motivos, HAVERÁ vagas).',
-                createdAt: new Date().toISOString()
-            },
-            {
-                id: '3',
-                disciplina: 'Raciocínio Lógico-Matemático',
-                assunto: 'Lógica de Proposições - Equivalências',
-                enunciado: 'Qual a negação da proposição composta: "Se estudo bastante, então passo no concurso"?',
-                respostaMarcada: 'Se não estudo bastante, então não passo no concurso.',
-                respostaCorreta: 'Estudo bastante E NÃO passo no concurso.',
-                motivo: 'Falta de Conteúdo Teórico',
-                status: 'Necessita Revisão',
-                explicacao: 'Regra do MANÉ para negar a condicional (p -> q): Mantém a primeira E Nega a segunda. p ^ ~q. Não confundir Negação com Equivalência (Contrapositiva).',
-                createdAt: new Date().toISOString()
-            }
-        ];
-
-        // Initialization
-        window.addEventListener('DOMContentLoaded', () => {
-            loadData();
-            renderApp();
-        });
-
-        // Load & Save Data
-        function loadData() {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (raw) {
-                try {
-                    items = JSON.parse(raw);
-                } catch(e) {
-                    items = sampleSeedData;
-                }
-            } else {
-                items = sampleSeedData;
-                saveData();
-            }
-        }
-
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-        }
-
-        // Render Main App
-        function renderApp() {
-            updateMetrics();
-            renderDiagnostics();
-            renderDisciplineTree();
-            populateDatalistAndFilters();
-            renderQuestionsList();
-        }
-
-        // Metrics Calculation
-        function updateMetrics() {
-            const total = items.length;
-            const pendentes = items.filter(i => i.status === 'Necessita Revisão' || i.status === 'Em Revisão').length;
-            const dominados = items.filter(i => i.status === 'Dominado').length;
-            const taxa = total > 0 ? Math.round((dominados / total) * 100) : 0;
-
-            document.getElementById('metricTotal').innerText = total;
-            document.getElementById('metricPendentes').innerText = pendentes;
-            document.getElementById('metricDominados').innerText = dominados;
-            document.getElementById('metricTaxa').innerText = `${taxa}%`;
-        }
-
-        // Diagnostics Breakdown Bar Chart
-        function renderDiagnostics() {
-            const container = document.getElementById('diagnosticsChart');
-            container.innerHTML = '';
-
-            if (items.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-500 col-span-2">Nenhum dado cadastrado para análise.</p>';
-                return;
-            }
-
-            const counts = {};
-            items.forEach(item => {
-                counts[item.motivo] = (counts[item.motivo] || 0) + 1;
-            });
-
-            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-            const maxVal = sorted[0] ? sorted[0][1] : 1;
-
-            sorted.forEach(([motivo, count]) => {
-                const pct = Math.round((count / items.length) * 100);
-                const barWidth = Math.round((count / maxVal) * 100);
-
-                const wrapper = document.createElement('div');
-                wrapper.className = 'space-y-1';
-                wrapper.innerHTML = `
-                    <div class="flex justify-between text-xs">
-                        <span class="text-slate-300 font-medium">${motivo}</span>
-                        <span class="text-slate-400">${count} (${pct}%)</span>
-                    </div>
-                    <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
-                        <div class="bg-gradient-to-r from-brand-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: ${barWidth}%"></div>
-                    </div>
-                `;
-                container.appendChild(wrapper);
-            });
-        }
-
-        // Populate Discipline Filter & Form Autocomplete
-        function populateDatalistAndFilters() {
-            const discSet = new Set(items.map(i => i.disciplina.trim()).filter(Boolean));
-            const datalist = document.getElementById('disciplinasDatalist');
-            const selectFilterDisc = document.getElementById('filterDisciplina');
-            const selectFilterAssunto = document.getElementById('filterAssunto');
-
-            const currentDisc = selectFilterDisc.value;
-            const currentAssunto = selectFilterAssunto.value;
-
-            // Datalist
-            datalist.innerHTML = '';
-            discSet.forEach(d => {
-                const opt = document.createElement('option');
-                opt.value = d;
-                datalist.appendChild(opt);
-            });
-
-            // Filter Discipline Select
-            selectFilterDisc.innerHTML = '<option value="">Todas as Matérias</option>';
-            Array.from(discSet).sort().forEach(d => {
-                const count = items.filter(i => i.disciplina === d).length;
-                const opt = document.createElement('option');
-                opt.value = d;
-                opt.innerText = `${d} (${count})`;
-                if (d === currentDisc) opt.selected = true;
-                selectFilterDisc.appendChild(opt);
-            });
-
-            // Filter Subject Select (based on selected discipline if any)
-            selectFilterAssunto.innerHTML = '<option value="">Todos os Assuntos</option>';
-            let filteredItemsForSubjects = items;
-            if (selectFilterDisc.value) {
-                filteredItemsForSubjects = items.filter(i => i.disciplina === selectFilterDisc.value);
-            }
-            const assuntoSet = new Set(filteredItemsForSubjects.map(i => i.assunto.trim()).filter(Boolean));
-            Array.from(assuntoSet).sort().forEach(a => {
-                const count = filteredItemsForSubjects.filter(i => i.assunto === a).length;
-                const opt = document.createElement('option');
-                opt.value = a;
-                opt.innerText = `${a} (${count})`;
-                if (a === currentAssunto) opt.selected = true;
-                selectFilterAssunto.appendChild(opt);
-            });
-        }
-
-        function onFilterDisciplinaChange() {
-            selectedDisciplineFromTree = null;
-            selectedSubjectFromTree = null;
-            populateDatalistAndFilters();
-            renderApp();
-        }
-
-        // Sidebar Tree View Rendering
-        function renderDisciplineTree() {
-            const container = document.getElementById('disciplineTree');
-            const treeTotalCount = document.getElementById('treeTotalCount');
-            container.innerHTML = '';
-            treeTotalCount.innerText = `${items.length} erros`;
-
-            if (items.length === 0) {
-                container.innerHTML = '<p class="text-xs text-slate-500 italic p-2">Sem matérias cadastradas.</p>';
-                return;
-            }
-
-            // Group data
-            const treeMap = {};
-            items.forEach(item => {
-                const disc = item.disciplina || 'Sem Matéria';
-                const ass = item.assunto || 'Geral';
-                if (!treeMap[disc]) treeMap[disc] = {};
-                if (!treeMap[disc][ass]) treeMap[disc][ass] = 0;
-                treeMap[disc][ass]++;
-            });
-
-            Object.keys(treeMap).sort().forEach(disc => {
-                const totalDiscErros = Object.values(treeMap[disc]).reduce((a, b) => a + b, 0);
-                const isDiscSelected = selectedDisciplineFromTree === disc && !selectedSubjectFromTree;
-
-                const discEl = document.createElement('div');
-                discEl.className = 'space-y-1';
-
-                let subjectsHTML = '';
-                Object.keys(treeMap[disc]).sort().forEach(ass => {
-                    const count = treeMap[disc][ass];
-                    const isAssSelected = selectedDisciplineFromTree === disc && selectedSubjectFromTree === ass;
-                    subjectsHTML += `
-                        <button onclick="selectTreeFilter('${escapeQuotes(disc)}', '${escapeQuotes(ass)}')" class="w-full text-left pl-6 pr-2 py-1 rounded-lg text-xs flex items-center justify-between transition-colors ${isAssSelected ? 'bg-brand-500/20 text-brand-300 font-semibold' : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'}">
-                            <span class="truncate"><i class="fa-regular fa-file-code text-[10px] mr-1.5 opacity-60"></i>${ass}</span>
-                            <span class="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded-md ml-1">${count}</span>
-                        </button>
-                    `;
-                });
-
-                discEl.innerHTML = `
-                    <div class="flex items-center justify-between bg-slate-950/60 border border-slate-800/80 rounded-xl p-2 cursor-pointer hover:border-slate-700 transition-colors ${isDiscSelected ? 'border-brand-500/50 bg-brand-950/20' : ''}">
-                        <button onclick="selectTreeFilter('${escapeQuotes(disc)}', null)" class="flex items-center gap-2 text-xs font-semibold text-slate-200 truncate flex-grow text-left">
-                            <i class="fa-solid fa-folder text-brand-400 text-xs"></i>
-                            <span class="truncate">${disc}</span>
-                        </button>
-                        <span class="text-[10px] font-bold bg-slate-800 text-brand-400 px-2 py-0.5 rounded-full ml-2">${totalDiscErros}</span>
-                    </div>
-                    <div class="space-y-0.5 pt-0.5">
-                        ${subjectsHTML}
-                    </div>
-                `;
-
-                container.appendChild(discEl);
-            });
-        }
-
-        function selectTreeFilter(disc, ass) {
-            selectedDisciplineFromTree = disc;
-            selectedSubjectFromTree = ass;
-
-            // Sync with drop down controls
-            const discSelect = document.getElementById('filterDisciplina');
-            discSelect.value = disc || '';
-            populateDatalistAndFilters();
-
-            const assSelect = document.getElementById('filterAssunto');
-            assSelect.value = ass || '';
-
-            renderQuestionsList();
-            renderDisciplineTree();
-        }
-
-        // Questions List Filtering & Card Rendering
-        function getFilteredQuestions() {
-            const search = document.getElementById('searchInput').value.toLowerCase().trim();
-            const filterDisc = document.getElementById('filterDisciplina').value;
-            const filterAssunto = document.getElementById('filterAssunto').value;
-            const filterMotivo = document.getElementById('filterMotivo').value;
-
-            return items.filter(item => {
-                // Status Filter
-                if (activeStatusFilter !== 'ALL' && item.status !== activeStatusFilter) return false;
-
-                // Discipline Filter
-                if (filterDisc && item.disciplina !== filterDisc) return false;
-
-                // Subject Filter
-                if (filterAssunto && item.assunto !== filterAssunto) return false;
-
-                // Reason Filter
-                if (filterMotivo && item.motivo !== filterMotivo) return false;
-
-                // Text Search
-                if (search) {
-                    const text = `${item.disciplina} ${item.assunto} ${item.enunciado} ${item.explicacao} ${item.respostaMarcada} ${item.respostaCorreta}`.toLowerCase();
-                    if (!text.includes(search)) return false;
-                }
-
-                return true;
-            });
-        }
-
-        function renderQuestionsList() {
-            const container = document.getElementById('questionsContainer');
-            const emptyState = document.getElementById('emptyState');
-            container.innerHTML = '';
-
-            const filtered = getFilteredQuestions();
-
-            if (filtered.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            filtered.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4 hover:border-slate-700 transition-all shadow-lg';
-
-                // Status Badge Color Map
-                let statusBadge = '';
-                if (item.status === 'Necessita Revisão') {
-                    statusBadge = '<span class="bg-amber-950/50 border border-amber-800/60 text-amber-300 text-[11px] font-medium px-2.5 py-1 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> Necessita Revisão</span>';
-                } else if (item.status === 'Em Revisão') {
-                    statusBadge = '<span class="bg-sky-950/50 border border-sky-800/60 text-sky-300 text-[11px] font-medium px-2.5 py-1 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-arrows-rotate"></i> Em Revisão</span>';
-                } else {
-                    statusBadge = '<span class="bg-emerald-950/50 border border-emerald-800/60 text-emerald-300 text-[11px] font-medium px-2.5 py-1 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-circle-check"></i> Dominado</span>';
-                }
-
-                card.innerHTML = `
-                    <!-- Header Badges -->
-                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="bg-brand-950/80 border border-brand-800/80 text-brand-300 font-semibold text-xs px-2.5 py-1 rounded-lg">
-                                ${escapeHTML(item.disciplina)}
-                            </span>
-                            <span class="bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded-lg font-medium">
-                                ${escapeHTML(item.assunto)}
-                            </span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            ${statusBadge}
-                            <!-- Edit/Delete Action dropdown -->
-                            <button onclick="editQuestion('${item.id}')" class="p-1.5 text-slate-400 hover:text-brand-400 transition-colors" title="Editar">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <button onclick="deleteQuestion('${item.id}')" class="p-1.5 text-slate-400 hover:text-rose-400 transition-colors" title="Excluir">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Enunciado -->
-                    <div>
-                        <p class="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed whitespace-pre-line">${escapeHTML(item.enunciado)}</p>
-                    </div>
-
-                    <!-- Respostas Comparações -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl text-xs">
-                        <div>
-                            <span class="text-rose-400 font-semibold block mb-0.5"><i class="fa-solid fa-circle-xmark mr-1"></i> O que marcou:</span>
-                            <p class="text-slate-300">${escapeHTML(item.respostaMarcada || 'Não especificado')}</p>
-                        </div>
-                        <div>
-                            <span class="text-emerald-400 font-semibold block mb-0.5"><i class="fa-solid fa-circle-check mr-1"></i> Gabarito correto:</span>
-                            <p class="text-slate-300">${escapeHTML(item.respostaCorreta || 'Não especificado')}</p>
-                        </div>
-                    </div>
-
-                    <!-- Motivo & Explicação -->
-                    <div class="space-y-2 text-xs">
-                        <div class="flex items-center gap-2">
-                            <span class="text-slate-400 font-semibold">Diagnóstico:</span>
-                            <span class="bg-slate-800 text-amber-300 px-2.5 py-0.5 rounded-full font-medium text-[11px] border border-slate-700">
-                                <i class="fa-solid fa-bug text-[10px] mr-1"></i> ${escapeHTML(item.motivo)}
-                            </span>
-                        </div>
-                        ${item.explicacao ? `
-                            <div class="bg-brand-950/20 border border-brand-900/40 rounded-xl p-3 text-slate-300 space-y-1">
-                                <span class="text-brand-400 font-bold block text-[11px] uppercase tracking-wider">
-                                    <i class="fa-solid fa-lightbulb mr-1"></i> Explicação / Bizu / Lei Seca:
-                                </span>
-                                <p class="leading-relaxed whitespace-pre-line text-xs">${escapeHTML(item.explicacao)}</p>
-                            </div>
-                        ` : ''}
-                    </div>
-
-                    <!-- Card Quick Action Footer -->
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-800/60 text-xs text-slate-500">
-                        <span>Cadastrado em ${new Date(item.createdAt).toLocaleDateString('pt-BR')}</span>
-                        <div class="flex items-center gap-2">
-                            <span class="text-[11px]">Alterar status:</span>
-                            <select onchange="updateQuestionStatus('${item.id}', this.value)" class="bg-slate-950 border border-slate-700 text-slate-300 text-xs rounded-lg px-2 py-1 focus:outline-none focus:border-brand-500">
-                                <option value="Necessita Revisão" ${item.status === 'Necessita Revisão' ? 'selected' : ''}>Necessita Revisão</option>
-                                <option value="Em Revisão" ${item.status === 'Em Revisão' ? 'selected' : ''}>Em Revisão</option>
-                                <option value="Dominado" ${item.status === 'Dominado' ? 'selected' : ''}>Dominado</option>
-                            </select>
-                        </div>
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-        }
-
-        // Status Filter Buttons
-        function setStatusFilter(status) {
-            activeStatusFilter = status;
-
-            const tabs = {
-                'ALL': 'tabStatusAll',
-                'Necessita Revisão': 'tabStatusPendente',
-                'Em Revisão': 'tabStatusEmRevisao',
-                'Dominado': 'tabStatusDominado'
-            };
-
-            Object.entries(tabs).forEach(([st, btnId]) => {
-                const btn = document.getElementById(btnId);
-                if (st === status) {
-                    btn.className = 'px-3 py-1.5 rounded-lg border font-medium transition-colors bg-brand-500/10 border-brand-500/40 text-brand-300';
-                } else {
-                    btn.className = 'px-3 py-1.5 rounded-lg border font-medium transition-colors bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200';
-                }
-            });
-
-            renderQuestionsList();
-        }
-
-        // Modal Form Handlers
-        function openFormModal(editId = null) {
-            document.getElementById('questionForm').reset();
-            document.getElementById('editId').value = '';
-            document.getElementById('modalFormTitle').innerHTML = '<i class="fa-solid fa-circle-plus text-brand-400"></i> Registrar Novo Erro';
-
-            if (editId) {
-                const item = items.find(i => i.id === editId);
-                if (item) {
-                    document.getElementById('editId').value = item.id;
-                    document.getElementById('formDisciplina').value = item.disciplina;
-                    document.getElementById('formAssunto').value = item.assunto;
-                    document.getElementById('formEnunciado').value = item.enunciado;
-                    document.getElementById('formRespostaMarcada').value = item.respostaMarcada || '';
-                    document.getElementById('formRespostaCorreta').value = item.respostaCorreta || '';
-                    document.getElementById('formMotivo').value = item.motivo;
-                    document.getElementById('formStatus').value = item.status;
-                    document.getElementById('formExplicacao').value = item.explicacao || '';
-                    document.getElementById('modalFormTitle').innerHTML = '<i class="fa-solid fa-pen-to-square text-brand-400"></i> Editar Registro de Erro';
-                }
-            }
-
-            document.getElementById('formModal').classList.remove('hidden');
-        }
-
-        function closeFormModal() {
-            document.getElementById('formModal').classList.add('hidden');
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const editId = document.getElementById('editId').value;
-
-            const newItem = {
-                id: editId || Date.now().toString(),
-                disciplina: document.getElementById('formDisciplina').value.trim(),
-                assunto: document.getElementById('formAssunto').value.trim(),
-                enunciado: document.getElementById('formEnunciado').value.trim(),
-                respostaMarcada: document.getElementById('formRespostaMarcada').value.trim(),
-                respostaCorreta: document.getElementById('formRespostaCorreta').value.trim(),
-                motivo: document.getElementById('formMotivo').value,
-                status: document.getElementById('formStatus').value,
-                explicacao: document.getElementById('formExplicacao').value.trim(),
-                createdAt: editId ? (items.find(i => i.id === editId)?.createdAt || new Date().toISOString()) : new Date().toISOString()
-            };
-
-            if (editId) {
-                const idx = items.findIndex(i => i.id === editId);
-                if (idx !== -1) items[idx] = newItem;
-                showToast('Erro atualizado com sucesso!');
-            } else {
-                items.unshift(newItem);
-                showToast('Novo erro cadastrado com sucesso!');
-            }
-
-            saveData();
-            closeFormModal();
-            renderApp();
-        }
-
-        function editQuestion(id) {
-            openFormModal(id);
-        }
-
-        function deleteQuestion(id) {
-            if (confirm('Tem certeza de que deseja excluir este registro?')) {
-                items = items.filter(i => i.id !== id);
-                saveData();
-                renderApp();
-                showToast('Registro excluído.');
-            }
-        }
-
-        function updateQuestionStatus(id, newStatus) {
-            const item = items.find(i => i.id === id);
-            if (item) {
-                item.status = newStatus;
-                saveData();
-                renderApp();
-                showToast(`Status alterado para "${newStatus}"`);
-            }
-        }
-
-        // Interactive Flashcard Mode Session Logic
-        function startFlashcards() {
-            fcItems = getFilteredQuestions();
-            if (fcItems.length === 0) {
-                alert('Nenhuma questão encontrada para a revisão com os filtros selecionados.');
-                return;
-            }
-            fcIndex = 0;
-            fcRevealed = false;
-            document.getElementById('flashcardModal').classList.remove('hidden');
-            renderFlashcard();
-        }
-
-        function closeFlashcardModal() {
-            document.getElementById('flashcardModal').classList.add('hidden');
-        }
-
-        function renderFlashcard() {
-            const item = fcItems[fcIndex];
-            const body = document.getElementById('fcBody');
-            const footer = document.getElementById('fcFooter');
-            const progress = document.getElementById('fcProgress');
-
-            progress.innerText = `Questão ${fcIndex + 1} de ${fcItems.length}`;
-
-            body.innerHTML = `
-                <!-- Meta Info -->
-                <div class="flex items-center justify-between border-b border-slate-800 pb-3 text-xs">
-                    <span class="bg-brand-950 text-brand-300 font-semibold px-2.5 py-1 rounded-lg border border-brand-800">
-                        ${escapeHTML(item.disciplina)}
-                    </span>
-                    <span class="text-slate-400 font-medium">${escapeHTML(item.assunto)}</span>
+            <div class="p-6 flex-1 flex flex-col justify-between space-y-6">
+                
+                <!-- Info Cabeçalho do Card -->
+                <div class="flex items-center justify-between text-xs border-b border-slate-800/60 pb-3">
+                    <span class="font-bold text-brand-400 uppercase tracking-wide" id="fcSubject">Direito Constitucional</span>
+                    <span class="text-slate-400" id="fcTopic">Direitos Fundamentais</span>
                 </div>
 
-                <!-- Enunciado -->
-                <div class="space-y-2">
-                    <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Enunciado:</span>
-                    <p class="text-sm sm:text-base font-medium text-slate-100 leading-relaxed whitespace-pre-line">${escapeHTML(item.enunciado)}</p>
+                <!-- Corpo da Questão -->
+                <div class="space-y-4">
+                    <div class="bg-slate-950 border border-slate-800/80 p-4 rounded-xl">
+                        <p class="text-sm text-slate-200 leading-relaxed font-medium" id="fcText">
+                            <!-- Enunciado -->
+                        </p>
+                    </div>
+
+                    <!-- Botão de Link Externo se houver -->
+                    <div id="fcLinkContainer" class="hidden">
+                        <!-- Link injetado -->
+                    </div>
+
+                    <!-- Resposta Escondida -->
+                    <div id="fcAnswerBox" class="hidden space-y-3 bg-slate-950/50 border border-slate-800 p-4 rounded-xl">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400">Gabarito: <strong class="text-emerald-400" id="fcCorrect"></strong></span>
+                            <span class="text-slate-400">Você havia marcado: <span class="text-rose-400" id="fcUserAns"></span></span>
+                        </div>
+                        <div class="text-xs text-slate-300 leading-relaxed border-t border-slate-800 pt-2" id="fcExplanation">
+                            <!-- Bizu -->
+                        </div>
+                        <div class="text-[11px] text-amber-400/90 bg-amber-500/10 border border-amber-500/20 p-2 rounded-lg" id="fcReason">
+                            <!-- Motivo do erro prévio -->
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Hidden Answer / Revealed Block -->
-                ${fcRevealed ? `
-                    <div class="pt-4 border-t border-slate-800 space-y-4 animate-fadeIn">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                            <div class="bg-rose-950/30 border border-rose-800/40 p-3 rounded-xl">
-                                <span class="text-rose-400 font-bold block mb-1">Seu erro anterior:</span>
-                                <p class="text-slate-300">${escapeHTML(item.respostaMarcada || 'Não especificado')}</p>
-                            </div>
-                            <div class="bg-emerald-950/30 border border-emerald-800/40 p-3 rounded-xl">
-                                <span class="text-emerald-400 font-bold block mb-1">Gabarito correto:</span>
-                                <p class="text-slate-300">${escapeHTML(item.respostaCorreta || 'Não especificado')}</p>
-                            </div>
-                        </div>
+                <!-- Controles do Flashcard -->
+                <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <button id="fcRevealBtn" onclick="revealFlashcardAnswer()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-100 font-medium px-5 py-2.5 rounded-xl text-xs transition">
+                        <i class="fa-solid fa-eye"></i> Revelar Resposta &amp; Bizu
+                    </button>
 
-                        <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-xs space-y-2">
-                            <span class="text-amber-400 font-bold block">
-                                <i class="fa-solid fa-bug mr-1"></i> Diagnóstico: ${escapeHTML(item.motivo)}
-                            </span>
-                            <p class="text-slate-300 leading-relaxed whitespace-pre-line">${escapeHTML(item.explicacao || 'Sem explicação cadastrada.')}</p>
-                        </div>
-                    </div>
-                ` : `
-                    <div class="text-center py-6 border-2 border-dashed border-slate-800 rounded-2xl bg-slate-950/40">
-                        <i class="fa-solid fa-eye-slash text-slate-600 text-3xl mb-2"></i>
-                        <p class="text-xs text-slate-400">Tente se lembrar da resposta antes de revelar o gabarito e a explicação!</p>
-                    </div>
-                `}
-            `;
-
-            // Footer controls
-            if (!fcRevealed) {
-                footer.innerHTML = `
-                    <button onclick="fcNext(-1)" ${fcIndex === 0 ? 'disabled class="opacity-40 cursor-not-allowed px-4 py-2 bg-slate-800 text-slate-400 text-xs rounded-xl"' : 'class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl transition-colors"'}>
-                        <i class="fa-solid fa-chevron-left mr-1"></i> Anterior
-                    </button>
-                    <button onclick="revealFc()" class="px-6 py-2.5 bg-gradient-to-r from-brand-500 to-teal-400 hover:from-brand-400 hover:to-teal-300 text-slate-950 font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-brand-500/20 transition-all">
-                        <i class="fa-solid fa-eye mr-1"></i> Revelar Resposta & Explicação
-                    </button>
-                    <button onclick="fcNext(1)" ${fcIndex === fcItems.length - 1 ? 'disabled class="opacity-40 cursor-not-allowed px-4 py-2 bg-slate-800 text-slate-400 text-xs rounded-xl"' : 'class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl transition-colors"'}>
-                        Próxima <i class="fa-solid fa-chevron-right ml-1"></i>
-                    </button>
-                `;
-            } else {
-                footer.innerHTML = `
-                    <div class="flex items-center gap-2 w-full sm:w-auto">
-                        <span class="text-xs text-slate-400">Avaliação rápida:</span>
-                        <button onclick="fcMarkStatus('${item.id}', 'Necessita Revisão')" class="px-3 py-1.5 bg-amber-950/60 border border-amber-800/60 hover:bg-amber-900/60 text-amber-300 text-xs rounded-xl transition-colors flex items-center gap-1">
-                            <i class="fa-solid fa-xmark"></i> Errei / Revisar
+                    <div id="fcFeedbackBtns" class="hidden flex items-center gap-2 w-full sm:w-auto">
+                        <button onclick="answerFlashcard(false)" class="flex-1 sm:flex-none bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 px-4 py-2 rounded-xl text-xs font-semibold transition">
+                            <i class="fa-solid fa-xmark"></i> Ainda Erro
                         </button>
-                        <button onclick="fcMarkStatus('${item.id}', 'Dominado')" class="px-3 py-1.5 bg-emerald-950/60 border border-emerald-800/60 hover:bg-emerald-900/60 text-emerald-300 text-xs rounded-xl transition-colors flex items-center gap-1">
+                        <button onclick="answerFlashcard(true)" class="flex-1 sm:flex-none bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 px-4 py-2 rounded-xl text-xs font-semibold transition">
                             <i class="fa-solid fa-check"></i> Dominei!
                         </button>
                     </div>
+                </div>
 
-                    <div class="flex items-center gap-2">
-                        <button onclick="fcNext(-1)" ${fcIndex === 0 ? 'disabled class="opacity-40 cursor-not-allowed px-3 py-2 bg-slate-800 text-slate-400 text-xs rounded-xl"' : 'class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-xl transition-colors"'}>
-                            <i class="fa-solid fa-chevron-left"></i>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Principal -->
+    <script>
+        // Configuração & Estado Inicial
+        let questions = JSON.parse(localStorage.getItem('caderno_erros_db')) || [];
+        let currentFiltered = [];
+        let activeFilterSubject = null;
+        let activeFilterTopic = null;
+        
+        // Estado Flashcards
+        let fcIndex = 0;
+        let fcList = [];
+
+        const REASON_MAP = {
+            'pegadinha': { label: 'Pegadinha / Inatenção', icon: 'fa-triangle-exclamation', color: 'amber' },
+            'teoria': { label: 'Falta de Conteúdo Teórico', icon: 'fa-book-open', color: 'sky' },
+            'lei-seca': { label: 'Lei Seca / Decoreba', icon: 'fa-scale-balanced', color: 'purple' },
+            'interpretacao': { label: 'Erro de Interpretação', icon: 'fa-magnifying-glass-chart', color: 'indigo' },
+            'calculo': { label: 'Erro de Raciocínio / Cálculo', icon: 'fa-calculator', color: 'rose' },
+            'chute': { label: 'Chute Consciente', icon: 'fa-dice', color: 'slate' }
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            if (questions.length === 0) {
+                // Exemplo demonstrativo inicial
+                questions = [{
+                    id: Date.now(),
+                    subject: 'Direito Administrativo',
+                    topic: 'Atos Administrativos',
+                    source: 'https://www.qconcursos.com/',
+                    text: 'Os atos administrativos discricionários não estão sujeitos ao controle judicial, sob pena de violação ao princípio da separação dos poderes.',
+                    userAnswer: 'Certo',
+                    correctAnswer: 'Errado',
+                    reason: 'teoria',
+                    explanation: 'O Poder Judiciário PODE sim analisar atos discricionários, desde que sob o aspecto da LEGALIDADE e LEGITIMIDADE, não podendo adentrar o mérito administrativo (conveniência e oportunidade).',
+                    priority: 'alta',
+                    status: 'revisar',
+                    createdAt: new Date().toISOString()
+                }];
+                saveToStorage();
+            }
+            updateApp();
+        });
+
+        function saveToStorage() {
+            localStorage.setItem('caderno_erros_db', JSON.stringify(questions));
+        }
+
+        function updateApp() {
+            updateSubjectsDatalist();
+            renderSubjectsTree();
+            applyFilters();
+            renderAnalytics();
+        }
+
+        // Modais
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            if (id === 'addQuestionModal') {
+                document.getElementById('questionForm').reset();
+                document.getElementById('qId').value = '';
+                document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Mapear Novo Erro';
+            }
+        }
+
+        // Datalist de matérias para auto-completar
+        function updateSubjectsDatalist() {
+            const subjects = [...new Set(questions.map(q => q.subject))];
+            const datalist = document.getElementById('subjectsList');
+            datalist.innerHTML = subjects.map(s => `<option value="${s}">`).join('');
+        }
+
+        // Salvar / Editar Questão
+        function saveQuestion(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('qId').value;
+            const questionData = {
+                id: id ? parseInt(id) : Date.now(),
+                subject: document.getElementById('qSubject').value.trim(),
+                topic: document.getElementById('qTopic').value.trim(),
+                source: document.getElementById('qSource').value.trim(),
+                text: document.getElementById('qText').value.trim(),
+                userAnswer: document.getElementById('qUserAnswer').value.trim(),
+                correctAnswer: document.getElementById('qCorrectAnswer').value.trim(),
+                reason: document.getElementById('qReason').value,
+                explanation: document.getElementById('qExplanation').value.trim(),
+                priority: document.getElementById('qPriority').value,
+                status: document.getElementById('qStatus').value,
+                createdAt: id ? (questions.find(q => q.id == id)?.createdAt || new Date().toISOString()) : new Date().toISOString()
+            };
+
+            if (id) {
+                const index = questions.findIndex(q => q.id == id);
+                if (index !== -1) questions[index] = questionData;
+            } else {
+                questions.unshift(questionData);
+            }
+
+            saveToStorage();
+            closeModal('addQuestionModal');
+            updateApp();
+        }
+
+        function editQuestion(id) {
+            const q = questions.find(item => item.id === id);
+            if (!q) return;
+
+            document.getElementById('qId').value = q.id;
+            document.getElementById('qSubject').value = q.subject;
+            document.getElementById('qTopic').value = q.topic;
+            document.getElementById('qSource').value = q.source || '';
+            document.getElementById('qText').value = q.text;
+            document.getElementById('qUserAnswer').value = q.userAnswer || '';
+            document.getElementById('qCorrectAnswer').value = q.correctAnswer || '';
+            document.getElementById('qReason').value = q.reason;
+            document.getElementById('qExplanation').value = q.explanation;
+            document.getElementById('qPriority').value = q.priority;
+            document.getElementById('qStatus').value = q.status;
+
+            document.getElementById('modalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square text-brand-400"></i> Editar Erro Mapeado';
+            openModal('addQuestionModal');
+        }
+
+        function deleteQuestion(id) {
+            if (confirm('Tem certeza que deseja remover esta questão do caderno?')) {
+                questions = questions.filter(q => q.id !== id);
+                saveToStorage();
+                updateApp();
+            }
+        }
+
+        // Filtros e Ordenação
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const reason = document.getElementById('filterReason').value;
+            const status = document.getElementById('filterStatus').value;
+
+            currentFiltered = questions.filter(q => {
+                const matchesSearch = !search || 
+                    q.text.toLowerCase().includes(search) || 
+                    q.explanation.toLowerCase().includes(search) ||
+                    q.topic.toLowerCase().includes(search) ||
+                    q.subject.toLowerCase().includes(search);
+                
+                const matchesReason = !reason || q.reason === reason;
+                const matchesStatus = !status || q.status === status;
+                const matchesSubjectTree = !activeFilterSubject || q.subject === activeFilterSubject;
+                const matchesTopicTree = !activeFilterTopic || q.topic === activeFilterTopic;
+
+                return matchesSearch && matchesReason && matchesStatus && matchesSubjectTree && matchesTopicTree;
+            });
+
+            // Atualiza Label de Filtros Ativos
+            let label = [];
+            if (activeFilterSubject) label.push(`Matéria: <strong>${activeFilterSubject}</strong>`);
+            if (activeFilterTopic) label.push(`Tópico: <strong>${activeFilterTopic}</strong>`);
+            if (reason) label.push(`Motivo: <strong>${REASON_MAP[reason]?.label}</strong>`);
+            if (status) label.push(`Status: <strong>${status}</strong>`);
+            
+            document.getElementById('activeFilterLabel').innerHTML = label.length > 0 ? label.join(' | ') : 'Exibindo todas as questões';
+
+            renderQuestions();
+        }
+
+        function filterByTree(subject, topic = null) {
+            activeFilterSubject = subject;
+            activeFilterTopic = topic;
+            applyFilters();
+            renderSubjectsTree();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterReason').value = '';
+            document.getElementById('filterStatus').value = '';
+            activeFilterSubject = null;
+            activeFilterTopic = null;
+            applyFilters();
+            renderSubjectsTree();
+        }
+
+        // Renderização dos Cards de Questão
+        function renderQuestions() {
+            const sortBy = document.getElementById('sortBy').value;
+            const container = document.getElementById('questionsContainer');
+            
+            // Ordenar
+            let sorted = [...currentFiltered];
+            if (sortBy === 'recent') {
+                sorted.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+            } else if (sortBy === 'priority') {
+                const pOrder = { 'alta': 3, 'media': 2, 'baixa': 1 };
+                sorted.sort((a,b) => pOrder[b.priority] - pOrder[a.priority]);
+            } else if (sortBy === 'subject') {
+                sorted.sort((a,b) => a.subject.localeCompare(b.subject));
+            }
+
+            document.getElementById('filteredCountBadge').innerText = sorted.length;
+
+            if (sorted.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center space-y-3">
+                        <i class="fa-solid fa-folder-open text-3xl text-slate-600"></i>
+                        <p class="text-sm text-slate-400">Nenhuma questão encontrada com os filtros selecionados.</p>
+                        <button onclick="resetFilters()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg transition">Limpar Filtros</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = sorted.map(q => {
+                const reasonInfo = REASON_MAP[q.reason] || { label: q.reason, icon: 'fa-circle-exclamation', color: 'slate' };
+                
+                const priorityBadge = {
+                    'alta': '<span class="px-2 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 text-[10px] font-semibold">Prioridade Alta</span>',
+                    'media': '<span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-semibold">Prioridade Média</span>',
+                    'baixa': '<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold">Prioridade Baixa</span>'
+                }[q.priority];
+
+                const statusBadge = {
+                    'revisar': '<span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px]">A Revisar</span>',
+                    'em-revisao': '<span class="px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px]">Em Revisão</span>',
+                    'dominado': '<span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px]">Dominado</span>'
+                }[q.status];
+
+                // TRATAMENTO DA FONTE / LINK
+                let sourceHtml = '';
+                if (q.source) {
+                    const isUrl = q.source.startsWith('http://') || q.source.startsWith('https://');
+                    if (isUrl) {
+                        sourceHtml = `
+                            <a href="${q.source}" target="_blank" class="inline-flex items-center gap-1 text-[11px] text-brand-400 hover:underline bg-brand-500/10 border border-brand-500/20 px-2 py-0.5 rounded-md">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Refazer na Plataforma
+                            </a>
+                        `;
+                    } else {
+                        sourceHtml = `
+                            <span class="inline-flex items-center gap-1 text-[11px] text-slate-400 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded-md">
+                                <i class="fa-solid fa-book-open text-[10px]"></i> ${q.source}
+                            </span>
+                        `;
+                    }
+                }
+
+                return `
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 hover:border-slate-700 transition">
+                        
+                        <!-- Topo Card -->
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-xs font-bold text-brand-400">${q.subject}</span>
+                                <span class="text-slate-600 text-xs">•</span>
+                                <span class="text-xs text-slate-300 font-medium">${q.topic}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                ${priorityBadge}
+                                ${statusBadge}
+                            </div>
+                        </div>
+
+                        <!-- Enunciado -->
+                        <div class="text-xs text-slate-200 leading-relaxed font-normal bg-slate-950/40 p-3 rounded-xl border border-slate-800/50">
+                            ${q.text}
+                        </div>
+
+                        <!-- Fonte / Link da questão -->
+                        ${sourceHtml ? `<div class="flex items-center gap-2">${sourceHtml}</div>` : ''}
+
+                        <!-- Resposta vs Erro -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            <div class="bg-rose-950/20 border border-rose-900/30 p-2.5 rounded-xl">
+                                <span class="block text-[10px] text-rose-400 font-bold uppercase">Sua resposta:</span>
+                                <span class="text-slate-200">${q.userAnswer || 'Não preenchido'}</span>
+                            </div>
+                            <div class="bg-emerald-950/20 border border-emerald-900/30 p-2.5 rounded-xl">
+                                <span class="block text-[10px] text-emerald-400 font-bold uppercase">Gabarito correto:</span>
+                                <span class="text-slate-200">${q.correctAnswer || 'Não preenchido'}</span>
+                            </div>
+                        </div>
+
+                        <!-- Diagnóstico + Gabarito Comentado -->
+                        <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-3 space-y-2">
+                            <div class="flex items-center gap-2 text-xs text-amber-400 font-medium">
+                                <i class="fa-solid ${reasonInfo.icon}"></i>
+                                <span>Motivo do Erro: ${reasonInfo.label}</span>
+                            </div>
+                            <div class="text-xs text-slate-300 leading-relaxed border-t border-slate-800/60 pt-2">
+                                <strong class="text-brand-400 font-semibold block mb-0.5">Bizu / Fundamentação:</strong>
+                                ${q.explanation}
+                            </div>
+                        </div>
+
+                        <!-- Rodapé Card de Ações -->
+                        <div class="flex items-center justify-between pt-1 text-xs">
+                            <span class="text-[10px] text-slate-500">Cadastrado em ${new Date(q.createdAt).toLocaleDateString('pt-BR')}</span>
+                            <div class="flex items-center gap-3">
+                                <button onclick="toggleStatus(${q.id})" class="text-slate-400 hover:text-emerald-400 transition" title="Alternar Status Dominado">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </button>
+                                <button onclick="editQuestion(${q.id})" class="text-slate-400 hover:text-brand-400 transition" title="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button onclick="deleteQuestion(${q.id})" class="text-slate-400 hover:text-rose-400 transition" title="Excluir">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleStatus(id) {
+            const q = questions.find(item => item.id === id);
+            if (!q) return;
+            q.status = q.status === 'dominado' ? 'revisar' : 'dominado';
+            saveToStorage();
+            updateApp();
+        }
+
+        // Renderizar Árvore de Matérias/Assuntos na Sidebar
+        function renderSubjectsTree() {
+            const treeContainer = document.getElementById('subjectsTree');
+            
+            // Agrupar
+            const tree = {};
+            questions.forEach(q => {
+                if (!tree[q.subject]) tree[q.subject] = {};
+                if (!tree[q.subject][q.topic]) tree[q.subject][q.topic] = 0;
+                tree[q.subject][q.topic]++;
+            });
+
+            if (Object.keys(tree).length === 0) {
+                treeContainer.innerHTML = `<p class="text-slate-500 text-xs">Nenhuma matéria registrada.</p>`;
+                return;
+            }
+
+            let html = '';
+            for (const subject in tree) {
+                const totalSubject = Object.values(tree[subject]).reduce((a,b) => a+b, 0);
+                const isSelectedSubject = activeFilterSubject === subject && !activeFilterTopic;
+
+                html += `
+                    <div class="space-y-1">
+                        <button onclick="filterByTree('${subject}')" class="w-full text-left font-semibold py-1 px-2 rounded-lg flex items-center justify-between text-slate-200 hover:bg-slate-800 transition ${isSelectedSubject ? 'bg-brand-500/10 text-brand-400 border border-brand-500/20' : ''}">
+                            <span class="truncate">${subject}</span>
+                            <span class="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded-full">${totalSubject}</span>
                         </button>
-                        <button onclick="fcNext(1)" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold rounded-xl transition-colors">
-                            Avançar <i class="fa-solid fa-chevron-right ml-1"></i>
+                        <div class="pl-3 space-y-1 border-l border-slate-800 ml-2">
+                `;
+
+                for (const topic in tree[subject]) {
+                    const count = tree[subject][topic];
+                    const isSelectedTopic = activeFilterSubject === subject && activeFilterTopic === topic;
+
+                    html += `
+                        <button onclick="filterByTree('${subject}', '${topic}')" class="w-full text-left text-[11px] py-0.5 px-2 rounded flex items-center justify-between text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition ${isSelectedTopic ? 'text-brand-400 font-bold' : ''}">
+                            <span class="truncate">${topic}</span>
+                            <span class="text-[9px] text-slate-500">${count}</span>
                         </button>
+                    `;
+                }
+
+                html += `
+                        </div>
                     </div>
                 `;
             }
+
+            treeContainer.innerHTML = html;
         }
 
-        function revealFc() {
-            fcRevealed = true;
-            renderFlashcard();
-        }
+        // Renderizar Painel de Analytics (Por motivo)
+        function renderAnalytics() {
+            const container = document.getElementById('reasonsAnalytics');
+            
+            const total = questions.length;
+            const dominados = questions.filter(q => q.status === 'dominado').length;
+            
+            document.getElementById('statTotalErros').innerText = total;
+            document.getElementById('statDominados').innerText = dominados;
 
-        function fcNext(dir) {
-            const next = fcIndex + dir;
-            if (next >= 0 && next < fcItems.length) {
-                fcIndex = next;
-                fcRevealed = false;
-                renderFlashcard();
+            if (total === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 col-span-full">Sem dados suficientes.</p>`;
+                return;
             }
+
+            // Contar por motivo
+            const counts = {};
+            Object.keys(REASON_MAP).forEach(k => counts[k] = 0);
+            questions.forEach(q => {
+                if (counts[q.reason] !== undefined) counts[q.reason]++;
+            });
+
+            container.innerHTML = Object.keys(REASON_MAP).map(key => {
+                const info = REASON_MAP[key];
+                const count = counts[key];
+                const percent = Math.round((count / total) * 100) || 0;
+
+                return `
+                    <div class="bg-slate-950 border border-slate-800/80 p-2.5 rounded-xl flex flex-col justify-between space-y-2">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400 text-[11px] font-medium truncate" title="${info.label}">${info.label}</span>
+                            <span class="font-bold text-slate-200 text-[11px]">${count}</span>
+                        </div>
+                        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-brand-400 h-full rounded-full" style="width: ${percent}%"></div>
+                        </div>
+                        <span class="text-[9px] text-slate-500 text-right">${percent}% do total</span>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function fcMarkStatus(id, status) {
-            updateQuestionStatus(id, status);
-            if (fcIndex < fcItems.length - 1) {
-                fcNext(1);
+        // MODO FLASHCARD / REVISÃO ATIVA
+        function startFlashcards() {
+            fcList = currentFiltered.length > 0 ? [...currentFiltered] : [...questions];
+            if (fcList.length === 0) {
+                alert('Cadastre ou filtre questões primeiro para iniciar os flashcards!');
+                return;
+            }
+            fcIndex = 0;
+            openModal('flashcardModal');
+            loadFlashcard();
+        }
+
+        function loadFlashcard() {
+            const q = fcList[fcIndex];
+            
+            document.getElementById('fcCounter').innerText = `${fcIndex + 1} / ${fcList.length}`;
+            document.getElementById('fcSubject').innerText = q.subject;
+            document.getElementById('fcTopic').innerText = q.topic;
+            document.getElementById('fcText').innerText = q.text;
+
+            // Link no flashcard
+            const linkBox = document.getElementById('fcLinkContainer');
+            if (q.source) {
+                linkBox.classList.remove('hidden');
+                const isUrl = q.source.startsWith('http://') || q.source.startsWith('https://');
+                if (isUrl) {
+                    linkBox.innerHTML = `
+                        <a href="${q.source}" target="_blank" class="inline-flex items-center gap-1.5 text-xs text-brand-400 hover:underline bg-brand-500/10 border border-brand-500/20 px-3 py-1.5 rounded-lg">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Questão na Plataforma de Origem
+                        </a>
+                    `;
+                } else {
+                    linkBox.innerHTML = `
+                        <span class="text-xs text-slate-400 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg inline-block">
+                            <i class="fa-solid fa-book-open"></i> Fonte: ${q.source}
+                        </span>
+                    `;
+                }
             } else {
-                showToast('Revisão da lista concluída!');
+                linkBox.classList.add('hidden');
+            }
+
+            document.getElementById('fcCorrect').innerText = q.correctAnswer || 'N/A';
+            document.getElementById('fcUserAns').innerText = q.userAnswer || 'N/A';
+            document.getElementById('fcExplanation').innerHTML = `<strong class="text-brand-400 block mb-0.5">Bizu:</strong> ${q.explanation}`;
+            
+            const reasonInfo = REASON_MAP[q.reason];
+            document.getElementById('fcReason').innerText = `Motivo do seu erro anterior: ${reasonInfo ? reasonInfo.label : q.reason}`;
+
+            // Resetar visibilidade da resposta
+            document.getElementById('fcAnswerBox').classList.add('hidden');
+            document.getElementById('fcRevealBtn').classList.remove('hidden');
+            document.getElementById('fcFeedbackBtns').classList.add('hidden');
+        }
+
+        function revealFlashcardAnswer() {
+            document.getElementById('fcAnswerBox').classList.remove('hidden');
+            document.getElementById('fcRevealBtn').classList.add('hidden');
+            document.getElementById('fcFeedbackBtns').classList.remove('hidden');
+        }
+
+        function answerFlashcard(mastered) {
+            const q = fcList[fcIndex];
+            const originalQ = questions.find(item => item.id === q.id);
+            if (originalQ) {
+                originalQ.status = mastered ? 'dominado' : 'revisar';
+                saveToStorage();
+            }
+
+            fcIndex++;
+            if (fcIndex < fcList.length) {
+                loadFlashcard();
+            } else {
+                alert('Sessão de flashcards concluída com sucesso!');
+                closeModal('flashcardModal');
+                updateApp();
             }
         }
 
-        // Data Sync & Export / Import Menu Handlers
-        function toggleDataMenu() {
-            const menu = document.getElementById('dataMenu');
-            menu.classList.toggle('hidden');
+        // Exportação e Importação de Dados (JSON)
+        function exportData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(questions, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `caderno_de_erros_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
         }
 
-        document.addEventListener('click', (e) => {
-            const menu = document.getElementById('dataMenu');
-            const btn = document.getElementById('btnDataMenu');
-            if (!menu.contains(e.target) && !btn.contains(e.target)) {
-                menu.classList.add('hidden');
-            }
-        });
-
-        function exportJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(items, null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `Caderno_de_Erros_Backup_${new Date().toISOString().slice(0,10)}.json`);
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
-            showToast('Backup JSON exportado com sucesso!');
-        }
-
-        function importJSON(event) {
+        function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1053,58 +906,20 @@
                 try {
                     const imported = JSON.parse(e.target.result);
                     if (Array.isArray(imported)) {
-                        items = imported;
-                        saveData();
-                        renderApp();
-                        showToast('Dados importados com sucesso!');
+                        if (confirm(`Deseja importar ${imported.length} questões? Seus dados atuais serão mantidos.`)) {
+                            questions = [...questions, ...imported];
+                            saveToStorage();
+                            updateApp();
+                            alert('Importação realizada com sucesso!');
+                        }
                     } else {
-                        alert('Formato de arquivo JSON inválido.');
+                        alert('Arquivo de backup inválido.');
                     }
-                } catch(err) {
-                    alert('Erro ao carregar arquivo JSON.');
+                } catch (err) {
+                    alert('Erro ao ler arquivo JSON.');
                 }
             };
             reader.readAsText(file);
-        }
-
-        function clearAllData() {
-            if (confirm('ATENÇÃO: Deseja apagar todos os registros do seu Caderno de Erros? Esta ação não poderá ser desfeita.')) {
-                items = [];
-                saveData();
-                renderApp();
-                showToast('Todos os dados foram apagados.');
-            }
-        }
-
-        // Helpers
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-
-            setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        function escapeHTML(str) {
-            if (!str) return '';
-            return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag] || tag)
-            );
-        }
-
-        function escapeQuotes(str) {
-            if (!str) return '';
-            return str.replace(/'/g, "\\'");
         }
     </script>
 </body>
